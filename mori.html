@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>森洄響 Mori-Flow AI v4.5 | 品牌引流版</title>
+    <style>
+        :root { --accent: #ccff00; --root-color: #2ecc71; --bg: #0a120a; --card: #162616; --panel: #1d2d1d; }
+        body { background: var(--bg); color: #e0e0e0; font-family: 'PingFang TC', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 0; margin: 0; }
+        
+        .promo-bar { background: var(--accent); color: #000; width: 100%; text-align: center; padding: 10px 0; font-weight: 900; font-size: 0.85em; letter-spacing: 1px; }
+        
+        .app { background: var(--card); padding: 25px; border-radius: 24px; width: 100%; max-width: 580px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); border: 1px solid #253525; margin-top: 30px; margin-bottom: 50px; }
+        
+        /* 品牌頭部區塊 */
+        .brand-header { text-align: center; margin-bottom: 25px; }
+        .brand-logo { width: 140px; height: auto; display: block; margin: 0 auto 10px auto; } /* 尺寸適中 */
+        h1 { color: var(--accent); text-align: center; letter-spacing: 3px; margin-top: 0; font-size: 1.5em; }
+        .subtitle { text-align: center; opacity: 0.5; font-size: 0.75em; margin-bottom: 0; }
+        
+        section { background: var(--panel); padding: 18px; border-radius: 14px; margin-bottom: 15px; border: 1px solid #2a3a2a; }
+        h3 { font-size: 0.8em; margin-top: 0; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+        
+        .row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+        input, select { padding: 10px; border-radius: 8px; border: none; background: #223322; color: #fff; outline: none; font-size: 0.9em; }
+        input { flex: 2; }
+        select { flex: 1; background: var(--accent); color: #000; font-weight: bold; }
+        
+        .btn { background: var(--accent); color: #0a120a; border: none; padding: 12px; border-radius: 8px; font-weight: 900; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(204,255,0,0.3); }
+
+        .cta-box { background: linear-gradient(145deg, #1d2d1d, #0a120a); padding: 20px; border-radius: 16px; margin-top: 25px; border: 1px solid var(--accent); text-align: center; }
+        .cta-box h4 { color: var(--accent); margin: 0 0 10px 0; font-size: 1.1em; }
+        .cta-box p { font-size: 0.85em; opacity: 0.8; line-height: 1.6; margin-bottom: 15px; }
+        .cta-link { display: inline-block; background: #fff; color: #000; padding: 10px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 0.9em; transition: 0.3s; }
+        .cta-link:hover { background: var(--accent); transform: translateY(-2px); }
+
+        .piano-container { margin-top: 10px; background: #000; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333; }
+        canvas { border-radius: 4px; max-width: 100%; }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .result-card { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; border-left: 4px solid var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="promo-bar">⚡ 限時領取：10 分鐘掌握《森洄響》流動鋼琴核心邏輯（點擊查看）</div>
+
+<div class="app">
+    <div class="brand-header">
+        <img class="brand-logo" src="new_logo.png" alt="森洄響 MORI-FLOW LOGO">
+        <h1>MORI-FLOW AI</h1>
+        <p class="subtitle">聲音重組引擎 v4.5 | 品牌引流入口</p>
+    
+    
+    <section>
+        <h3>級數改編 (都會美學模式)</h3>
+        <div class="row">
+            <span>設定調性：</span>
+            <select id="targetKey"></select>
+            <span>模式：</span>
+            <select id="emo">
+                <option value="urban">都會 Urban (Maj9)</option>
+                <option value="custom">自定義</option>
+            </select>
+        </div>
+        <div class="row">
+            <input type="text" id="numbers" placeholder="輸入數字 (例: 1 6 4 5)">
+            <button class="btn" style="width:auto;" onclick="moriNumbers()">演算計畫</button>
+        </div>
+        <div id="numberResults" class="result-grid"></div>
+    </section>
+
+    <section>
+        <h3>單弦拆解 (精確字典)</h3>
+        <div class="row">
+            <input type="text" id="singleChord" placeholder="例: Dm7, Fmaj9">
+            <button class="btn" style="width:auto;" onclick="lookup()">拆解</button>
+        </div>
+        <div id="pianoPanel" style="display:none;">
+            <div class="piano-container">
+                <canvas id="pianoCanvas" width="500" height="130"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="cta-box">
+        <h4>學會演算法，更要學會靈魂</h4>
+        <p>AI 給了你座標，但唯有「觸鍵」能賦予聲音生命。<br>加入《森洄響：流行鋼琴改編大全》，我將親自帶你完成從工程到美學的跨越。</p>
+        <a href="https://your-platform-link.com" target="_blank" class="cta-link">點擊探索教學平台 ➔</a>
+    </div>
+</div>
+
+<script>
+    const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const diatonicPattern = [0, 2, 4, 5, 7, 9, 11];
+
+    const keySelect = document.getElementById('targetKey');
+    notes.forEach((n, i) => keySelect.add(new Option(n, i)));
+    keySelect.value = 2; // 預設 D
+
+    function drawPiano(rootIdx, rhIndices) {
+        document.getElementById('pianoPanel').style.display = 'block';
+        const canvas = document.getElementById('pianoCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const kw = canvas.width / 15, kh = canvas.height;
+        const whiteKeyToNote = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24];
+        for (let i = 0; i < 15; i++) {
+            let noteVal = whiteKeyToNote[i];
+            ctx.fillStyle = (noteVal === rootIdx) ? "#2ecc71" : (rhIndices.includes(noteVal) ? "#ccff00" : "#fff");
+            ctx.fillRect(i * kw, 0, kw, kh);
+            ctx.strokeStyle = "#111"; ctx.strokeRect(i * kw, 0, kw, kh);
+        }
+        const blackKeyPattern = [1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0]; 
+        for (let i = 0; i < 14; i++) {
+            if (blackKeyPattern[i]) {
+                let noteVal = whiteKeyToNote[i] + 1;
+                ctx.fillStyle = (noteVal === rootIdx) ? "#2ecc71" : (rhIndices.includes(noteVal) ? "#ccff00" : "#222");
+                ctx.fillRect((i * kw) + (kw * 0.7), 0, kw * 0.6, kh * 0.6);
+            }
+        }
+    }
+
+    function moriNumbers() {
+        const input = document.getElementById('numbers').value.trim();
+        const keyRoot = parseInt(document.getElementById('targetKey').value);
+        const mode = document.getElementById('emo').value;
+        const container = document.getElementById('numberResults');
+        container.innerHTML = "";
+        const steps = input.split(/\s+/);
+        steps.forEach(s => {
+            const match = s.match(/^([1-7])(.*)$/);
+            if (!match) return;
+            let num = parseInt(match[1]), suffix = match[2];
+            let rootIdx = (keyRoot + diatonicPattern[num-1]) % 12, rootName = notes[rootIdx];
+            let name = "", rh = [];
+
+            if (mode === 'urban') {
+                let isM = [2,3,6,7].includes(num);
+                if (num === 5) { name = `${rootName}9`; rh = [notes[(rootIdx+4)%12], notes[(rootIdx+10)%12], notes[(rootIdx+14)%12]]; }
+                else if (isM) { name = `${rootName}m9`; rh = [notes[(rootIdx+3)%12], notes[(rootIdx+10)%12], notes[(rootIdx+14)%12]]; }
+                else { name = `${rootName}maj9`; rh = [notes[(rootIdx+4)%12], notes[(rootIdx+11)%12], notes[(rootIdx+14)%12]]; }
+            } else {
+                name = rootName + (suffix || "");
+                let isM = suffix.toLowerCase().includes('m') && !suffix.toLowerCase().includes('maj');
+                let is7 = suffix.includes('7'), isMaj7 = suffix.toLowerCase().includes('maj7') || suffix.includes('M7'), is9 = suffix.includes('9');
+                let offsets = [isM ? 3 : 4, 7];
+                if (is7 || isMaj7) offsets.push(isMaj7 ? 11 : 10);
+                if (is9) offsets.push(14);
+                rh = offsets.map(o => notes[(rootIdx + o) % 12]);
+            }
+            const card = document.createElement('div');
+            card.className = "result-card";
+            card.innerHTML = `<div style="font-size:0.7em; opacity:0.5;">級數 ${s}</div><div style="color:var(--accent); font-weight:bold;">${name}</div><div style="font-size:0.8em; margin-top:5px; color:#aaa;">${rh.join(' · ')}</div>`;
+            container.appendChild(card);
+        });
+    }
+
+    function lookup() {
+        const val = document.getElementById('singleChord').value.trim();
+        const rootMatch = val.match(/[A-G][#b]?/);
+        if (!rootMatch) return;
+        let rootStr = rootMatch[0].toUpperCase().replace('BB','A#').replace('EB','D#').replace('AB','G#').replace('DB','C#').replace('GB','F#');
+        const rIdx = notes.indexOf(rootStr);
+        let isMinor = val.toLowerCase().includes('m') && !val.toLowerCase().includes('maj'), is7 = val.includes('7'), isMaj7 = val.toLowerCase().includes('maj7') || val.includes('M7'), is9 = val.includes('9');
+        let offsets = [isMinor ? 3 : 4, 7]; 
+        if (is7 || isMaj7) offsets.push(isMaj7 ? 11 : 10);
+        if (is9) offsets.push(14);
+        drawPiano(rIdx, offsets.map(off => rIdx + off));
+    }
+</script>
+</body>
+</html>
